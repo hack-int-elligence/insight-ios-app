@@ -6,6 +6,8 @@
 target 'Insight' do
 
 pod ‘FBSDKLoginKit’
+pod ‘FBSDKCoreKit’
+pod ‘FBSDKShareKit’
 
 end
 

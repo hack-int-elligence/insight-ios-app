@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FBSDKShareKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Insight.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,17 +37,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6A6479B8DFECB2DBDC20353C528778E8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>81D7FE2A0FD9258247B1232874B837DA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>A48601FEE4437A924848DB48369BA809</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B211527B33A8212CE559C598E4926987</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C78CAB9013653EB1A250B2DFD3BC7666</key>
 		<dict>
 			<key>primary</key>
 			<true/>

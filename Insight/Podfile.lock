@@ -16,13 +16,18 @@ PODS:
     - FBSDKCoreKit/arc
   - FBSDKLoginKit (4.7.1):
     - FBSDKCoreKit
+  - FBSDKShareKit (4.7.1):
+    - FBSDKCoreKit
 
 DEPENDENCIES:
+  - FBSDKCoreKit
   - FBSDKLoginKit
+  - FBSDKShareKit
 
 SPEC CHECKSUMS:
   Bolts: 0e9bce58b9b9f5e8a7a4d47b16d2fabec289072b
   FBSDKCoreKit: 9141b70960a37930850370495fe565f4a27ac141
   FBSDKLoginKit: c11ed3c2833472db3bb4a4aecf27af4a6f69b173
+  FBSDKShareKit: 213adf63e073f41a346b0e7a689805880dc5150e
 
 COCOAPODS: 0.39.0

@@ -11,6 +11,8 @@
 
 @interface ViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, NSURLConnectionDataDelegate>
 
+@property (nonatomic, strong) NSString *fbAccessToken;
+
 
 @end
 
