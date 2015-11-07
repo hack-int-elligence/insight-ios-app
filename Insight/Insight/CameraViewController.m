@@ -9,6 +9,7 @@
 #import "CameraViewController.h"
 #import "OverLayView.h"
 #import "SVProgressHUD/SVProgressHUD.h"
+#import "Listing.h"
 
 @interface CameraViewController ()
 
@@ -21,6 +22,9 @@
 @property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) UILabel *testLabel;
 @property (nonatomic, strong) OverLayView *overlayView;
+@property (nonatomic) BOOL didInit;
+
+@property (nonatomic, strong) NSMutableArray *storeList;
 
 @end
 
@@ -43,6 +47,8 @@
     self.locationManager.delegate = self;
     [self.locationManager startUpdatingLocation];
     [self.locationManager startUpdatingHeading];
+    
+    self.didInit = NO;
     
     //[SVProgressHUD show];
     
@@ -78,27 +84,44 @@
 
 -(void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
     self.heading = (int) newHeading.trueHeading;
-    NSLog(@"%d", self.heading);
+    //NSLog(@"%d", self.heading);
     
-    [self updateObjectsWithHeading:self.heading];
+    if(!self.didInit && [self.storeList count] != 0) {
+        [self initViews];
+    }
+    
+    if([self.storeList count] != 0) {
+        [self updateObjectsWithHeading:self.heading];
+    }
+}
+
+-(void) initViews {
+    NSLog(@"%@", self.storeList);
+    for(Listing *l in self.storeList) {
+        [self.overlayView addSubview:l.view];
+        [self.overlayView addSubview:l.label];
+    }
+    self.didInit = YES;
 }
 
 - (void) updateObjectsWithHeading:(int) heading {
     
-    float xval = ((250 - heading)/63.54 + 1/2)*self.view.frame.size.height;
-    
-    self.testView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
-    self.testLabel.center = self.testView.center;
+    for(Listing *l in self.storeList) {
+        float xval = ((l.heading - heading)/63.54 + 1/2)*self.view.frame.size.height;
+        
+        l.view.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
+        l.label.center = self.testView.center;
+    }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
-    if(self.loops == 5) {
+    if(self.loops == 2) {
         self.latitude = self.locationManager.location.coordinate.latitude;
         self.longitude = self.locationManager.location.coordinate.longitude;
         NSLog(@"%f, %f", self.latitude, self.longitude);
         
-        //[self getPlaces];
+        [self getPlaces];
         
         if(self.fbAccessToken) {
             [self getEvents];
@@ -131,7 +154,44 @@
                                           NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
-                                          NSLog(@"%@", loginSuccessful);
+                                          //NSLog(@"%@", loginSuccessful);
+                                          
+                                          self.storeList = [[NSMutableArray alloc] init];
+                                          
+                                          for (NSDictionary *dict in loginSuccessful) {
+                                              Listing *tempListing = [[Listing alloc] init];
+                                              tempListing.placeName = [dict objectForKey:@"name"];
+                                              tempListing.latitude = [[[dict objectForKey:@"location"] objectForKey:@"lat"] floatValue];
+                                              tempListing.longitude = [[[dict objectForKey:@"location"] objectForKey:@"lng"] floatValue];
+                                              tempListing.address = [dict objectForKey:@"address"];
+                                              tempListing.heading = [[dict objectForKey:@"heading"] floatValue];
+                                              tempListing.distance = [[dict objectForKey:@"distance"] floatValue];
+                                              
+                                              float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
+                                              
+                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
+                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                                              tempView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
+                                              tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
+                                              tempView.layer.cornerRadius = 5;
+                                              tempView.layer.masksToBounds = YES;
+                                              //[self.overlayView addSubview:tempView];
+                                              
+                                              UILabel *tempLabel = [[UILabel alloc] init];
+                                              [tempLabel setText: tempListing.placeName];
+                                              [tempLabel setTextColor:[UIColor whiteColor]];
+                                              [tempLabel sizeToFit];
+                                              tempLabel.center = self.testView.center;
+                                              tempLabel.transform = CGAffineTransformMakeRotation(M_PI_2);
+                                              //[self.overlayView addSubview:tempLabel];
+                                              
+                                              tempListing.view = tempView;
+                                              tempListing.label = tempLabel;
+                                              
+                                              NSLog(@"%@", tempListing);
+                                              
+                                              [self.storeList addObject:tempListing];
+                                          }
                                       }];
     [dataTask resume];
 
@@ -159,21 +219,21 @@
         self.overlayView.opaque = NO;
         imagePicker.cameraOverlayView = self.overlayView;
         
-        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
-        self.testView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-        self.testView.center = CGPointMake(self.overlayView.frame.size.width/2, self.overlayView.frame.size.height/2);
-        self.testView.transform = CGAffineTransformMakeRotation(M_PI_2);
-        self.testView.layer.cornerRadius = 5;
-        self.testView.layer.masksToBounds = YES;
-        [self.overlayView addSubview:self.testView];
-        
-        self.testLabel = [[UILabel alloc] init];
-        [self.testLabel setText: @"Jacob's room ;)"];
-        [self.testLabel setTextColor:[UIColor whiteColor]];
-        [self.testLabel sizeToFit];
-        self.testLabel.center = self.testView.center;
-        self.testLabel.transform = CGAffineTransformMakeRotation(M_PI_2);
-        [self.overlayView addSubview:self.testLabel];
+//        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
+//        self.testView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+//        self.testView.center = CGPointMake(self.overlayView.frame.size.width/2, self.overlayView.frame.size.height/2);
+//        self.testView.transform = CGAffineTransformMakeRotation(M_PI_2);
+//        self.testView.layer.cornerRadius = 5;
+//        self.testView.layer.masksToBounds = YES;
+//        [self.overlayView addSubview:self.testView];
+//        
+//        self.testLabel = [[UILabel alloc] init];
+//        [self.testLabel setText: @"Jacob's room ;)"];
+//        [self.testLabel setTextColor:[UIColor whiteColor]];
+//        [self.testLabel sizeToFit];
+//        self.testLabel.center = self.testView.center;
+//        self.testLabel.transform = CGAffineTransformMakeRotation(M_PI_2);
+//        [self.overlayView addSubview:self.testLabel];
     }
 }
 

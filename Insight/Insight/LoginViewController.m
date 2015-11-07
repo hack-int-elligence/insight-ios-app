@@ -44,7 +44,7 @@
 
 -(void)loginButtonClicked {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_events", @"user_friends", @"read_stream"]
+    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_events", @"user_friends", @"user_posts", @"publish_actions"]
      fromViewController:self
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          if (error) {
