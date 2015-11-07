@@ -19,17 +19,19 @@
 
 @implementation CameraViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    //[self useCamera:self];
+    [self useCamera:self];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void) viewDidLoad {
+    [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     
-    [self getEvents];
+    if(self.fbAccessToken) {
+        [self getEvents];
+    }
     
     /*self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
@@ -98,7 +100,6 @@
         [dataTask resume];
     }
     self.loops++;
-    
 }
 
 - (void) useCamera:(id)sender {

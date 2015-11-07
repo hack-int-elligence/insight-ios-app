@@ -17,7 +17,6 @@
 
 @property (nonatomic, strong) CameraViewController *cameraVC;
 @property (nonatomic, strong) LoginViewController *loginVC;
-@property (nonatomic, strong) NSString *fbAccessToken;
 
 @end
 
@@ -43,12 +42,6 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    /*self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
-    NSLog(@"%@", self.fbAccessToken);
-    self.cameraVC.fbAccessToken = self.fbAccessToken;
-    [self.window setRootViewController:self.cameraVC];
-    [self.window makeKeyAndVisible]; */
-    
     [FBSDKAppEvents activateApp];
 }
 

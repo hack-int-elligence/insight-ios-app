@@ -25,24 +25,24 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // Add a custom login button to your app
     UIButton *myLoginButton=[UIButton buttonWithType:UIButtonTypeCustom];
     myLoginButton.frame=CGRectMake(0,0,180,40);
     [myLoginButton setImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
-    myLoginButton.center = self.view.center;
-    
-    // Handle clicks on the button
-    [myLoginButton
-     addTarget:self
-     action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    
-    // Add the button to the view
+    myLoginButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
+    [myLoginButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:myLoginButton];
+    
+    UIButton *skipButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [skipButton setTitle:@"Continue without Facebook" forState:UIControlStateNormal];
+    [skipButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [skipButton sizeToFit];
+    skipButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 50);
+    [skipButton addTarget:self action:@selector(skipFacebook) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:skipButton];
+
 }
 
-// Once the button is clicked, show the login dialog
--(void)loginButtonClicked
-{
+-(void)loginButtonClicked {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_events", @"user_friends"]
      fromViewController:self
@@ -61,6 +61,11 @@
              [self.navigationController pushViewController:self.cameraVC animated:NO];
          }
      }];
+}
+
+-(void) skipFacebook {
+    self.cameraVC = [[CameraViewController alloc] init];
+    [self.navigationController pushViewController:self.cameraVC animated:NO];
 }
 
 @end
