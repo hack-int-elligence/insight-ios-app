@@ -21,6 +21,7 @@
     [testButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [testButton sizeToFit];
     [testButton setCenter:self.center];
+    testButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self addSubview:testButton];
 }
 

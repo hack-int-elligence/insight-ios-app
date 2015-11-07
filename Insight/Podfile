@@ -5,9 +5,11 @@
 
 target 'Insight' do
 
-pod ‘FBSDKLoginKit’
-pod ‘FBSDKCoreKit’
-pod ‘FBSDKShareKit’
+pod 'FBSDKLoginKit'
+pod 'FBSDKCoreKit'
+pod 'FBSDKShareKit'
+
+pod 'SVProgressHUD'
 
 end
 

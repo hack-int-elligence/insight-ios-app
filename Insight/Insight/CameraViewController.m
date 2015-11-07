@@ -8,6 +8,7 @@
 
 #import "CameraViewController.h"
 #import "OverLayView.h"
+#import "SVProgressHUD/SVProgressHUD.h"
 
 @interface CameraViewController ()
 
@@ -37,6 +38,8 @@
     self.locationManager.delegate = self;
     [self.locationManager startUpdatingLocation];
     
+    //[SVProgressHUD show];
+    
 }
 
 - (void) getEvents {
@@ -61,6 +64,7 @@
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
                                           NSLog(@"%@", loginSuccessful);
+                                          //[SVProgressHUD dismiss];
                                       }];
     [dataTask resume];
 
