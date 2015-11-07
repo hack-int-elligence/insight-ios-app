@@ -7,13 +7,16 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "CameraViewController.h"
+#import "LoginViewController.h"
+
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 @interface AppDelegate ()
 
-@property (nonatomic, strong) ViewController *cameraVC;
+@property (nonatomic, strong) CameraViewController *cameraVC;
+@property (nonatomic, strong) LoginViewController *loginVC;
 @property (nonatomic, strong) NSString *fbAccessToken;
 
 @end
@@ -23,10 +26,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    self.cameraVC = [[ViewController alloc] init];
+    self.cameraVC = [[CameraViewController alloc] init];
+    self.loginVC = [[LoginViewController alloc] init];
+    
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.loginVC];
+    self.navController.navigationBarHidden = YES;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = self.cameraVC;
+    self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
@@ -36,11 +43,11 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
+    /*self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
     NSLog(@"%@", self.fbAccessToken);
     self.cameraVC.fbAccessToken = self.fbAccessToken;
     [self.window setRootViewController:self.cameraVC];
-    [self.window makeKeyAndVisible];
+    [self.window makeKeyAndVisible]; */
     
     [FBSDKAppEvents activateApp];
 }

@@ -6,11 +6,9 @@
 //  Copyright © 2015 Krishna Bharathala. All rights reserved.
 //
 
-#import "ViewController.h"
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "CameraViewController.h"
 
-@interface ViewController ()
+@interface CameraViewController ()
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) int loops;
@@ -19,39 +17,27 @@
 
 @end
 
-@implementation ViewController
+@implementation CameraViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    //[self useCamera:self];
 }
 
-- (void) viewDidApp {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.view.backgroundColor = [UIColor blackColor];
     
-    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.center = self.view.center;
-    loginButton.readPermissions = @[@"public_profile", @"email", @"user_friends", @"user_events"];
-    [self.view addSubview:loginButton];
-    
-    /*NSString *fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
-    NSLog(@"%@", fbAccessToken);*/
-    
+    [self getEvents];
     
     /*self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
     [self.locationManager requestWhenInUseAuthorization];
     self.locationManager.delegate = self;
-    [self.locationManager startUpdatingLocation]; */
+    [self.locationManager startUpdatingLocation];*/
     
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    if(self.fbAccessToken) {
-        [self getEvents];
-    }
 }
 
 - (void) getEvents {
@@ -68,12 +54,16 @@
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    if(conn) {
-        NSLog(@"Connection Successful");
-    } else {
-        NSLog(@"Connection could not be made");
-    }
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                                      {
+                                          NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                          options:kNilOptions
+                                                                                                            error:&error];
+                                          NSLog(@"%@", loginSuccessful);
+                                      }];
+    [dataTask resume];
 
 }
 
@@ -96,29 +86,27 @@
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:postData];
         
-        NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-        if(conn) {
-            NSLog(@"Connection Successful");
-        } else {
-            NSLog(@"Connection could not be made");
-        }
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                                          {
+                                              NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                              options:kNilOptions
+                                                                                                                error:&error];
+                                              NSLog(@"%@", loginSuccessful);
+                                          }];
+        [dataTask resume];
     }
     self.loops++;
     
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data {
-    
-    NSError* error;
-    NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
-                                                                    options:kNilOptions
-                                                                      error:&error];
-    NSLog(@"%@", loginSuccessful);
-}
-
 - (void) useCamera:(id)sender {
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        float scale = ceilf((screenSize.height / floorf(screenSize.width)) * 10.0) / 10.0;
         
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
@@ -127,7 +115,8 @@
         imagePicker.showsCameraControls = NO;
         imagePicker.navigationBarHidden = YES;
         imagePicker.toolbarHidden = YES;
-        [self presentViewController:imagePicker animated:YES completion:nil];
+        imagePicker.cameraViewTransform = CGAffineTransformMakeScale(scale, scale);
+        [self presentViewController:imagePicker animated:NO completion:nil];
         
     }
 }
