@@ -29,23 +29,19 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     
-    if(self.fbAccessToken) {
-        [self getEvents];
-    }
-    
-    /*self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
     [self.locationManager requestWhenInUseAuthorization];
     self.locationManager.delegate = self;
-    [self.locationManager startUpdatingLocation];*/
+    [self.locationManager startUpdatingLocation];
     
 }
 
 - (void) getEvents {
     
     NSLog(@"authToken=%@",self.fbAccessToken);
-    NSString *post = [NSString stringWithFormat:@"authToken=%@",self.fbAccessToken];
+    NSString *post = [NSString stringWithFormat:@"authToken=%@&latitude=%f&longitude=%f",self.fbAccessToken,self.latitude,self.longitude];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -72,34 +68,42 @@
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     if(self.loops == 5) {
-    
         self.latitude = self.locationManager.location.coordinate.latitude;
         self.longitude = self.locationManager.location.coordinate.longitude;
         
-        NSLog(@"latitude=%f&longitude=%f",self.latitude,self.longitude);
-        NSString *post = [NSString stringWithFormat:@"latitude=%f&longitude=%f",self.latitude,self.longitude];
-        NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-        NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [self getPlaces];
         
-        [request setURL:[NSURL URLWithString:@"https://yhackinsight.herokuapp.com/insight"]];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:postData];
-        
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
-                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
-                                          {
-                                              NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                              options:kNilOptions
-                                                                                                                error:&error];
-                                              NSLog(@"%@", loginSuccessful);
-                                          }];
-        [dataTask resume];
+        if(self.fbAccessToken) {
+            [self getEvents];
+        }
     }
     self.loops++;
+}
+
+- (void) getPlaces {
+    NSLog(@"latitude=%f&longitude=%f",self.latitude,self.longitude);
+    NSString *post = [NSString stringWithFormat:@"latitude=%f&longitude=%f",self.latitude,self.longitude];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    [request setURL:[NSURL URLWithString:@"https://yhackinsight.herokuapp.com/insight"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                                      {
+                                          NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                          options:kNilOptions
+                                                                                                            error:&error];
+                                          NSLog(@"%@", loginSuccessful);
+                                      }];
+    [dataTask resume];
+
 }
 
 - (void) useCamera:(id)sender {
@@ -117,6 +121,13 @@
         imagePicker.navigationBarHidden = YES;
         imagePicker.toolbarHidden = YES;
         imagePicker.cameraViewTransform = CGAffineTransformMakeScale(scale, scale);
+        
+        UIView* overlayView = [[UIView alloc] initWithFrame:imagePicker.view.frame];
+        overlayView.backgroundColor = [UIColor clearColor];
+        [overlayView.layer setOpaque:NO];
+        overlayView.opaque = NO;
+        imagePicker.cameraOverlayView = overlayView;
+        
         [self presentViewController:imagePicker animated:NO completion:nil];
         
     }
