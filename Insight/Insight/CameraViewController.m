@@ -7,6 +7,7 @@
 //
 
 #import "CameraViewController.h"
+#import "OverLayView.h"
 
 @interface CameraViewController ()
 
@@ -71,7 +72,7 @@
         self.latitude = self.locationManager.location.coordinate.latitude;
         self.longitude = self.locationManager.location.coordinate.longitude;
         
-        [self getPlaces];
+        //[self getPlaces];
         
         if(self.fbAccessToken) {
             [self getEvents];
@@ -121,15 +122,12 @@
         imagePicker.navigationBarHidden = YES;
         imagePicker.toolbarHidden = YES;
         imagePicker.cameraViewTransform = CGAffineTransformMakeScale(scale, scale);
+        [self presentViewController:imagePicker animated:NO completion:nil];
         
-        UIView* overlayView = [[UIView alloc] initWithFrame:imagePicker.view.frame];
-        overlayView.backgroundColor = [UIColor clearColor];
+        OverLayView *overlayView = [[OverLayView alloc] initWithFrame:imagePicker.view.frame];
         [overlayView.layer setOpaque:NO];
         overlayView.opaque = NO;
         imagePicker.cameraOverlayView = overlayView;
-        
-        [self presentViewController:imagePicker animated:NO completion:nil];
-        
     }
 }
 
