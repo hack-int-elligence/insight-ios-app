@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CameraViewController.h"
 
 @interface OverLayView : UIView
+
+@property (nonatomic, strong) CameraViewController *parentView;
 
 -(void) openOptions;
 

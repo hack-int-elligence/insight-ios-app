@@ -102,6 +102,38 @@
     }
 }
 
+-(void) displayInfo {
+    NSLog(@"DISPLAYING INFO");
+}
+
+-(void) displayDirections {
+    
+    NSString *post = [NSString stringWithFormat: @"currentLocationLatitude=%f&currentLocationLongitude=%f&destinationLatitude=%f&destinationLongitude=%f", self.latitude, self.longitude, self.currListing.latitude, self.currListing.longitude];
+    NSLog(@"%@", post);
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    [request setURL:[NSURL URLWithString:@"https://yhackinsight.herokuapp.com/directions"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                                      {
+                                          NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                          options:kNilOptions
+                                                                                                            error:&error];
+                                          NSLog(@"%@", loginSuccessful);
+                                          //[SVProgressHUD dismiss];
+                                      }];
+    [dataTask resume];
+
+}
+
 -(void) initViews {
     NSLog(@"%@", self.storeList);
     for(Listing *l in self.storeList) {
@@ -260,6 +292,7 @@
         self.overlayView = [[OverLayView alloc] initWithFrame:self.imagePicker.view.frame];
         [self.overlayView.layer setOpaque:NO];
         self.overlayView.opaque = NO;
+        self.overlayView.parentView = self;
         self.imagePicker.cameraOverlayView = self.overlayView;
         
 //        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];

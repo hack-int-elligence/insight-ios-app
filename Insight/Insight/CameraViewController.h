@@ -13,6 +13,9 @@
 
 @property (nonatomic, strong) NSString *fbAccessToken;
 
+-(void) displayInfo;
+-(void) displayDirections;
+
 
 @end
 

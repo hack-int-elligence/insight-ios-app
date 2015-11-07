@@ -8,6 +8,7 @@
 
 #import "OverLayView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CameraViewController.h"
 
 @interface OverLayView ()
 
@@ -45,25 +46,36 @@
     self.foodButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self addSubview:self.foodButton];
     
-    [self.eventsButton setHidden:YES];
-    [self.foodButton setHidden:YES];
-    self.settingsHidden = YES;
+    [self dismissSettings];
     
     self.infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.infoButton setFrame:CGRectMake(30, self.frame.size.height/2-40, 60, 60)];
     [self.infoButton setImage:[UIImage imageNamed:@"info.png"] forState:UIControlStateNormal];
     self.infoButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.infoButton];
     
     self.directionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.directionsButton setFrame:CGRectMake(30, self.frame.size.height/2+40, 60, 60)];
     [self.directionsButton setImage:[UIImage imageNamed:@"directions.png"] forState:UIControlStateNormal];
     self.directionsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.directionsButton addTarget:self action:@selector(showDirections) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.directionsButton];
     
+    [self dismissOptions];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
     [self addGestureRecognizer:tap];
+}
+
+-(void) showInfo {
+    [self.parentView displayInfo];
+    [self dismissOptions];
+}
+
+- (void) showDirections {
+    [self.parentView displayDirections];
+    [self dismissOptions];
 }
 
 -(void) openOptions {
