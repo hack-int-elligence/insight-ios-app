@@ -15,6 +15,7 @@
 @interface LoginViewController ()
 
 @property (nonatomic, strong) CameraViewController *cameraVC;
+@property (nonatomic, strong) NSString *fbAccessToken;
 
 @end
 
@@ -43,8 +44,9 @@
 }
 
 -(void)loginButtonClicked {
+    
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_events", @"user_friends", @"user_posts", @"publish_actions"]
+    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_events", @"user_friends", @"user_posts"]
      fromViewController:self
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          if (error) {
@@ -52,15 +54,35 @@
          } else if (result.isCancelled) {
              NSLog(@"Cancelled");
          } else {
-             NSString *fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
-             NSLog(@"%@", fbAccessToken);
+             self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
+             NSLog(@"%@", self.fbAccessToken);
              
              self.cameraVC = [[CameraViewController alloc] init];
-             self.cameraVC.fbAccessToken = fbAccessToken;
+             self.cameraVC.fbAccessToken = self.fbAccessToken;
              
              [self.navigationController pushViewController:self.cameraVC animated:NO];
+             
          }
      }];
+    
+    /* if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        self.cameraVC = [[CameraViewController alloc] init];
+        self.cameraVC.fbAccessToken = self.fbAccessToken;
+        
+        [self.navigationController pushViewController:self.cameraVC animated:NO];
+    } else {
+        [login logInWithPublishPermissions:@[@"publish_actions"]
+                               fromViewController:self
+                                          handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                                              self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
+                                              NSLog(@"%@", self.fbAccessToken);
+                                              
+                                              self.cameraVC = [[CameraViewController alloc] init];
+                                              self.cameraVC.fbAccessToken = self.fbAccessToken;
+                                              
+                                              [self.navigationController pushViewController:self.cameraVC animated:NO];
+                                          }];
+    } */
 }
 
 -(void) skipFacebook {

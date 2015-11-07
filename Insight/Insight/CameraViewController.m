@@ -84,7 +84,6 @@
 
 -(void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
     self.heading = (int) newHeading.trueHeading;
-    //NSLog(@"%d", self.heading);
     
     if(!self.didInit && [self.storeList count] != 0) {
         [self initViews];
@@ -107,10 +106,28 @@
 - (void) updateObjectsWithHeading:(int) heading {
     
     for(Listing *l in self.storeList) {
+        
+//        int distance = 12;
+//        
+//        int theta = -(((((int)(heading - l.heading)%360)+540)%360)-180);
+//        NSLog(@"THETA: %d", theta);
+//        int val = 2*distance*cos(fabs((double)theta*M_PI/180))*tan(63.54/2*M_PI/180);
+//        NSLog(@"VAL: %d", val);
+//        int set;
+//        if(theta > 0) {
+//            set = val/2 + distance*sin(fabs((double) theta*M_PI/180.0));
+//        } else {
+//            set = distance*sin(fabs((double)theta*M_PI/180.0));
+//        }
+//        NSLog(@"SET: %d", set);
+//        float xval = set/val * self.view.frame.size.height;
+//        NSLog(@"XVAL: %f", xval);
+//
+        
         float xval = ((l.heading - heading)/63.54 + 1/2)*self.view.frame.size.height;
         
         l.view.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
-        l.label.center = self.testView.center;
+        l.label.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
     }
 }
 
@@ -135,7 +152,6 @@
 }
 
 - (void) getPlaces {
-    NSLog(@"latitude=%f&longitude=%f",self.latitude,self.longitude);
     NSString *post = [NSString stringWithFormat:@"latitude=%f&longitude=%f",self.latitude,self.longitude];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
@@ -154,7 +170,6 @@
                                           NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
-                                          //NSLog(@"%@", loginSuccessful);
                                           
                                           self.storeList = [[NSMutableArray alloc] init];
                                           
@@ -175,7 +190,6 @@
                                               tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempView.layer.cornerRadius = 5;
                                               tempView.layer.masksToBounds = YES;
-                                              //[self.overlayView addSubview:tempView];
                                               
                                               UILabel *tempLabel = [[UILabel alloc] init];
                                               [tempLabel setText: tempListing.placeName];
@@ -183,12 +197,10 @@
                                               [tempLabel sizeToFit];
                                               tempLabel.center = self.testView.center;
                                               tempLabel.transform = CGAffineTransformMakeRotation(M_PI_2);
-                                              //[self.overlayView addSubview:tempLabel];
+                                              tempLabel.adjustsFontSizeToFitWidth = YES;
                                               
                                               tempListing.view = tempView;
                                               tempListing.label = tempLabel;
-                                              
-                                              NSLog(@"%@", tempListing);
                                               
                                               [self.storeList addObject:tempListing];
                                           }
