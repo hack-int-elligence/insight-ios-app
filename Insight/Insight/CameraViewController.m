@@ -11,6 +11,10 @@
 #import "SVProgressHUD/SVProgressHUD.h"
 #import "Listing.h"
 
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
+
 @interface CameraViewController ()
 
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
@@ -60,6 +64,46 @@
     
     //[SVProgressHUD show];
     
+}
+
+- (void) checkIn {
+    
+    NSLog(@"i want to check in");
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    
+    if (![[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [login logInWithPublishPermissions:@[@"publish_actions"]
+                        fromViewController:self
+                                   handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                                       self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;}];
+     }
+    
+    NSLog(@"%@", self.fbAccessToken);
+    NSString *post = [NSString stringWithFormat:@"authToken=%@&latitude=%f&longitude=%f&name=%@",self.fbAccessToken,self.currListing.latitude ,self.currListing.longitude, self.currListing.placeName];
+    NSLog(@"%@", post);
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    [request setURL:[NSURL URLWithString:@"https://yhackinsight.herokuapp.com/fb_checkin"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                                      {
+                                          NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                          options:kNilOptions
+                                                                                                            error:&error];
+                                          NSLog(@"%@", loginSuccessful);
+                                          //[SVProgressHUD dismiss];
+                                      }];
+    [dataTask resume];
+
 }
 
 - (void) getEvents {

@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) UIButton *infoButton;
 @property (nonatomic, strong) UIButton *directionsButton;
+@property (nonatomic, strong) UIButton *checkinButton;
 @property (nonatomic) BOOL optionsHidden;
 
 @end
@@ -49,18 +50,25 @@
     [self dismissSettings];
     
     self.infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.infoButton setFrame:CGRectMake(30, self.frame.size.height/2-40, 60, 60)];
+    [self.infoButton setFrame:CGRectMake(30, self.frame.size.height/2-60, 60, 60)];
     [self.infoButton setImage:[UIImage imageNamed:@"info.png"] forState:UIControlStateNormal];
     self.infoButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.infoButton];
     
     self.directionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.directionsButton setFrame:CGRectMake(30, self.frame.size.height/2+40, 60, 60)];
+    [self.directionsButton setFrame:CGRectMake(30, self.frame.size.height/2, 60, 60)];
     [self.directionsButton setImage:[UIImage imageNamed:@"directions.png"] forState:UIControlStateNormal];
     self.directionsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.directionsButton addTarget:self action:@selector(showDirections) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.directionsButton];
+    
+    self.checkinButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.checkinButton setFrame:CGRectMake(30, self.frame.size.height/2+60, 60, 60)];
+    [self.checkinButton setImage:[UIImage imageNamed:@"checkin.png"] forState:UIControlStateNormal];
+    self.checkinButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.checkinButton addTarget:self action:@selector(checkIn) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.checkinButton];
     
     [self dismissOptions];
     
@@ -78,10 +86,16 @@
     [self dismissOptions];
 }
 
+- (void) checkIn {
+    [self.parentView checkIn];
+    [self dismissOptions];
+}
+
 -(void) openOptions {
     if(self.optionsHidden) {
         [self.directionsButton setHidden:NO];
         [self.infoButton setHidden:NO];
+        [self.checkinButton setHidden:NO];
         self.optionsHidden = NO;
     } else {
         [self dismissOptions];
@@ -91,6 +105,7 @@
 -(void) dismissOptions {
     [self.directionsButton setHidden:YES];
     [self.infoButton setHidden:YES];
+    [self.checkinButton setHidden:YES];
     self.optionsHidden = YES;
 }
 

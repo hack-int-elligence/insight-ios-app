@@ -15,6 +15,7 @@
 
 -(void) displayInfo;
 -(void) displayDirections;
+-(void) checkIn;
 
 
 @end

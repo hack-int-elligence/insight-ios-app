@@ -64,25 +64,6 @@
              
          }
      }];
-    
-    /* if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
-        self.cameraVC = [[CameraViewController alloc] init];
-        self.cameraVC.fbAccessToken = self.fbAccessToken;
-        
-        [self.navigationController pushViewController:self.cameraVC animated:NO];
-    } else {
-        [login logInWithPublishPermissions:@[@"publish_actions"]
-                               fromViewController:self
-                                          handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                                              self.fbAccessToken = [FBSDKAccessToken currentAccessToken].tokenString;
-                                              NSLog(@"%@", self.fbAccessToken);
-                                              
-                                              self.cameraVC = [[CameraViewController alloc] init];
-                                              self.cameraVC.fbAccessToken = self.fbAccessToken;
-                                              
-                                              [self.navigationController pushViewController:self.cameraVC animated:NO];
-                                          }];
-    } */
 }
 
 -(void) skipFacebook {
