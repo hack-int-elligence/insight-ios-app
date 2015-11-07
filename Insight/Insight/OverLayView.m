@@ -15,20 +15,16 @@
 @property (nonatomic, strong) UIButton *foodButton;
 @property (nonatomic) BOOL settingsHidden;
 
+@property (nonatomic, strong) UIButton *infoButton;
+@property (nonatomic, strong) UIButton *directionsButton;
+@property (nonatomic) BOOL optionsHidden;
+
 @end
 
 @implementation OverLayView
 
 - (void)drawRect:(CGRect)rect {
     self.backgroundColor = [UIColor clearColor];
-    
-    /*UIButton *testButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [testButton setTitle:@"TEST" forState:UIControlStateNormal];
-    [testButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [testButton sizeToFit];
-    [testButton setCenter:self.center];
-    testButton.transform = CGAffineTransformMakeRotation(M_PI_2);
-    [self addSubview:testButton];*/
     
     UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingsButton setFrame:CGRectMake(self.frame.size.width-50, self.frame.size.height-50, 40, 40)];
@@ -53,20 +49,46 @@
     [self.foodButton setHidden:YES];
     self.settingsHidden = YES;
     
+    self.infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.infoButton setFrame:CGRectMake(30, self.frame.size.height/2-40, 60, 60)];
+    [self.infoButton setImage:[UIImage imageNamed:@"info.png"] forState:UIControlStateNormal];
+    self.infoButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self addSubview:self.infoButton];
+    
+    self.directionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.directionsButton setFrame:CGRectMake(30, self.frame.size.height/2+40, 60, 60)];
+    [self.directionsButton setImage:[UIImage imageNamed:@"directions.png"] forState:UIControlStateNormal];
+    self.directionsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self addSubview:self.directionsButton];
+    
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
     [self addGestureRecognizer:tap];
 }
 
+-(void) openOptions {
+    if(self.optionsHidden) {
+        [self.directionsButton setHidden:NO];
+        [self.infoButton setHidden:NO];
+        self.optionsHidden = NO;
+    } else {
+        [self dismissOptions];
+    }
+}
+
+-(void) dismissOptions {
+    [self.directionsButton setHidden:YES];
+    [self.infoButton setHidden:YES];
+    self.optionsHidden = YES;
+}
+
 -(void) openSettings {
-    NSLog(@"Clicked Settings");
     if(self.settingsHidden) {
         [self.eventsButton setHidden:NO];
         [self.foodButton setHidden:NO];
         self.settingsHidden = NO;
     } else {
-        [self.eventsButton setHidden:YES];
-        [self.foodButton setHidden:YES];
-        self.settingsHidden = YES;
+        [self dismissSettings];
     }
 }
 
@@ -79,6 +101,7 @@
 - (void)tapOnView:(UITapGestureRecognizer *)sender {
     NSLog(@"Tapped");
     [self dismissSettings];
+    [self dismissOptions];
 }
 
 

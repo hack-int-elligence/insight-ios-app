@@ -13,11 +13,14 @@
 
 @interface CameraViewController ()
 
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) int loops;
 @property (nonatomic) float latitude;
 @property (nonatomic) float longitude;
 @property (nonatomic) int heading;
+@property (nonatomic) int count;
 
 @property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) UILabel *testLabel;
@@ -25,6 +28,10 @@
 @property (nonatomic) BOOL didInit;
 
 @property (nonatomic, strong) NSMutableArray *storeList;
+@property (nonatomic, strong) NSMutableArray *infoButtonList;
+
+@property (nonatomic, strong) NSMutableDictionary *viewToListing;
+@property (nonatomic, strong) Listing *currListing;
 
 @end
 
@@ -49,6 +56,7 @@
     [self.locationManager startUpdatingHeading];
     
     self.didInit = NO;
+    self.count = 0;
     
     //[SVProgressHUD show];
     
@@ -127,13 +135,14 @@
         float xval = ((l.heading - heading)/63.54 + 1/2)*self.view.frame.size.height;
         
         l.view.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
-        l.label.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
+        l.label.center = CGPointMake(self.overlayView.frame.size.width/2+20, xval);
     }
+    
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
-    if(self.loops == 2) {
+    if(self.loops == 3) {
         self.latitude = self.locationManager.location.coordinate.latitude;
         self.longitude = self.locationManager.location.coordinate.longitude;
         NSLog(@"%f, %f", self.latitude, self.longitude);
@@ -172,6 +181,7 @@
                                                                                                             error:&error];
                                           
                                           self.storeList = [[NSMutableArray alloc] init];
+                                          self.viewToListing = [[NSMutableDictionary alloc] init];
                                           
                                           for (NSDictionary *dict in loginSuccessful) {
                                               Listing *tempListing = [[Listing alloc] init];
@@ -191,22 +201,43 @@
                                               tempView.layer.cornerRadius = 5;
                                               tempView.layer.masksToBounds = YES;
                                               
-                                              UILabel *tempLabel = [[UILabel alloc] init];
+                                              UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 130, 30)];
                                               [tempLabel setText: tempListing.placeName];
                                               [tempLabel setTextColor:[UIColor whiteColor]];
-                                              [tempLabel sizeToFit];
                                               tempLabel.center = self.testView.center;
                                               tempLabel.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempLabel.adjustsFontSizeToFitWidth = YES;
+                                              tempLabel.textAlignment = NSTextAlignmentCenter;
+                                              
+//                                              UIButton *tempInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//                                              [tempInfoButton setImage:[UIImage imageNamed:@"info.png"] forState:UIControlStateNormal];
+//                                              [tempInfoButton setFrame:CGRectMake(0, 0, 20, 20)];
+//                                              tempInfoButton.center = self.testView.center;
                                               
                                               tempListing.view = tempView;
                                               tempListing.label = tempLabel;
+                                              
+                                              tempListing.view.userInteractionEnabled = YES;
+                                              UITapGestureRecognizer *tapGesture =
+                                              [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTap:)];
+                                              [tempListing.view addGestureRecognizer:tapGesture];
+                                              
+                                              tempListing.view.tag = (NSUInteger)self.count;
+                                              self.count++;
+                                              [self.viewToListing setObject:tempListing forKey:[NSString stringWithFormat:@"%ld",(long)tempListing.view.tag]];
                                               
                                               [self.storeList addObject:tempListing];
                                           }
                                       }];
     [dataTask resume];
 
+}
+
+- (void) viewTap:(UITapGestureRecognizer *)recognizer {
+    self.currListing = [self.viewToListing objectForKey:[NSString stringWithFormat:@"%ld", (long)recognizer.view.tag]];
+    NSLog(@"%@", self.currListing);
+    [self.overlayView openOptions];
+    
 }
 
 - (void) useCamera:(id)sender {
@@ -216,20 +247,20 @@
         CGSize screenSize = [[UIScreen mainScreen] bounds].size;
         float scale = ceilf((screenSize.height / floorf(screenSize.width)) * 10.0) / 10.0;
         
-        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.delegate = self;
-        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        imagePicker.allowsEditing = NO;
-        imagePicker.showsCameraControls = NO;
-        imagePicker.navigationBarHidden = YES;
-        imagePicker.toolbarHidden = YES;
-        imagePicker.cameraViewTransform = CGAffineTransformMakeScale(scale, scale);
-        [self presentViewController:imagePicker animated:NO completion:nil];
+        self.imagePicker = [[UIImagePickerController alloc] init];
+        self.imagePicker.delegate = self;
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.allowsEditing = NO;
+        self.imagePicker.showsCameraControls = NO;
+        self.imagePicker.navigationBarHidden = YES;
+        self.imagePicker.toolbarHidden = YES;
+        self.imagePicker.cameraViewTransform = CGAffineTransformMakeScale(scale, scale);
+        [self presentViewController:self.imagePicker animated:NO completion:nil];
         
-        self.overlayView = [[OverLayView alloc] initWithFrame:imagePicker.view.frame];
+        self.overlayView = [[OverLayView alloc] initWithFrame:self.imagePicker.view.frame];
         [self.overlayView.layer setOpaque:NO];
         self.overlayView.opaque = NO;
-        imagePicker.cameraOverlayView = self.overlayView;
+        self.imagePicker.cameraOverlayView = self.overlayView;
         
 //        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
 //        self.testView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];

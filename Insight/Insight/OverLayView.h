@@ -10,4 +10,6 @@
 
 @interface OverLayView : UIView
 
+-(void) openOptions;
+
 @end
