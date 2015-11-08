@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *eventsButton;
 @property (nonatomic, strong) UIButton *foodButton;
 @property (nonatomic, strong) UIButton *yaleButton;
+@property (nonatomic, strong) UIButton *resetButton;
 @property (nonatomic) BOOL settingsHidden;
 
 @property (nonatomic, strong) UIButton *infoButton;
@@ -36,12 +37,12 @@
     [settingsButton addTarget:self action:@selector(openSettings) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:settingsButton];
     
-    self.eventsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.eventsButton setFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-50, 40, 40)];
-    [self.eventsButton setImage:[UIImage imageNamed:@"events.png"] forState:UIControlStateNormal];
-    self.eventsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
-    [self.eventsButton addTarget:self action:@selector(eventsTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.eventsButton];
+    self.resetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.resetButton setFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-50, 40, 40)];
+    [self.resetButton setImage:[UIImage imageNamed:@"all.png"] forState:UIControlStateNormal];
+    self.resetButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.resetButton addTarget:self action:@selector(resetTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.resetButton];
     
     self.foodButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.foodButton setFrame:CGRectMake(self.frame.size.width-150, self.frame.size.height-50, 40, 40)];
@@ -56,6 +57,13 @@
     self.yaleButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.yaleButton addTarget:self action:@selector(yaleTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.yaleButton];
+    
+    self.eventsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.eventsButton setFrame:CGRectMake(self.frame.size.width-250, self.frame.size.height-50, 40, 40)];
+    [self.eventsButton setImage:[UIImage imageNamed:@"events.png"] forState:UIControlStateNormal];
+    self.eventsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.eventsButton addTarget:self action:@selector(eventsTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.eventsButton];
     
     [self dismissSettings];
     
@@ -101,6 +109,11 @@
     [self dismissSettings];
 }
 
+-(void) resetTapped {
+    [self.parentView allTapped];
+    [self dismissSettings];
+}
+
 -(void) showInfo {
     [self.parentView displayInfo];
     [self dismissOptions];
@@ -139,6 +152,7 @@
         [self.eventsButton setHidden:NO];
         [self.foodButton setHidden:NO];
         [self.yaleButton setHidden:NO];
+        [self.resetButton setHidden:NO];
         self.settingsHidden = NO;
     } else {
         [self dismissSettings];
@@ -149,6 +163,7 @@
     [self.eventsButton setHidden:YES];
     [self.foodButton setHidden:YES];
     [self.yaleButton setHidden:YES];
+    [self.resetButton setHidden:YES];
     self.settingsHidden = YES;
 }
 
