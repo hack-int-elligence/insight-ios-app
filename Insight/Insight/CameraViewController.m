@@ -151,8 +151,7 @@
 
 -(void) displayInfo {
     InfoViewController *infoVC = [[InfoViewController alloc] init];
-    //infoVC.info = self.currListing.info;
-    infoVC.info = @"This is just some test text so that I can see if this view looks good.";
+    infoVC.info = self.currListing.info;
     [self.imagePicker presentViewController:infoVC animated:YES completion:nil];
 }
 
@@ -282,7 +281,7 @@
                                               tempListing.address = [[dict objectForKey:@"place"] objectForKey:@"name"];
                                               tempListing.heading = [[dict objectForKey:@"heading"] floatValue];
                                               tempListing.distance = [[dict objectForKey:@"distance"] floatValue];
-                                              tempListing.icon = [dict objectForKey:@"description"];
+                                              tempListing.info = [dict objectForKey:@"description"];
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
@@ -341,7 +340,7 @@
                                           NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
-                                          
+                                          NSLog(@"%@", loginSuccessful);
                                           self.viewArray = [[NSMutableArray alloc] init];
                                           
                                           for (NSDictionary *dict in loginSuccessful) {
@@ -353,7 +352,13 @@
                                               tempListing.heading = [[dict objectForKey:@"heading"] floatValue];
                                               tempListing.distance = [[dict objectForKey:@"distance"] floatValue];
                                               tempListing.icon = [dict objectForKey:@"icon"];
-                                              tempListing.info = [dict objectForKey:@"info"];
+                                              tempListing.info = [dict objectForKey:@"BUILDING_PROSE"];
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [dict objectForKey:@"DESCRIPTION"];
+                                              }
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [[[dict objectForKey:@"reviews"] firstObject] objectForKey:@"text"];
+                                              }
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
@@ -424,7 +429,13 @@
                                               tempListing.heading = [[dict objectForKey:@"heading"] floatValue];
                                               tempListing.distance = [[dict objectForKey:@"distance"] floatValue];
                                               tempListing.icon = [dict objectForKey:@"icon"];
-                                              tempListing.info = [dict objectForKey:@"info"];
+                                              tempListing.info = [dict objectForKey:@"BUILDING_PROSE"];
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [dict objectForKey:@"DESCRIPTION"];
+                                              }
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [[[dict objectForKey:@"reviews"] firstObject] objectForKey:@"text"];
+                                              }
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
@@ -483,7 +494,7 @@
                                           NSDictionary *loginSuccessful = [NSJSONSerialization JSONObjectWithData:data
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
-                                          
+                                          NSLog(@"%@", loginSuccessful);
                                           self.viewArray = [[NSMutableArray alloc] init];
                                           
                                           for (NSDictionary *dict in loginSuccessful) {
@@ -495,8 +506,13 @@
                                               tempListing.heading = [[dict objectForKey:@"heading"] floatValue];
                                               tempListing.distance = [[dict objectForKey:@"distance"] floatValue];
                                               tempListing.icon = [dict objectForKey:@"icon"];
-                                              tempListing.info = [dict objectForKey:@"info"];
-                                              
+                                              tempListing.info = [dict objectForKey:@"BUILDING_PROSE"];
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [dict objectForKey:@"DESCRIPTION"];
+                                              }
+                                              if(!tempListing.info) {
+                                                  tempListing.info = [[[dict objectForKey:@"reviews"] firstObject] objectForKey:@"text"];
+                                              }
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
                                               UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
