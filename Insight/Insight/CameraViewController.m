@@ -17,14 +17,6 @@
 
 @interface CameraViewController ()
 
-typedef NS_ENUM (NSUInteger, FilterType) {
-    FilterTypeAll,
-    FilterTypeFood,
-    FilterTypeYale,
-    FilterTypeEvents,
-    FilterTypeCount,
-};
-
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -45,8 +37,6 @@ typedef NS_ENUM (NSUInteger, FilterType) {
 
 @property (nonatomic) BOOL gettingData;
 @property (nonatomic) BOOL didInit;
-
-@property (nonatomic) int currFilter;
 
 @end
 
@@ -229,28 +219,24 @@ typedef NS_ENUM (NSUInteger, FilterType) {
     [self removeViews];
     [self getFood];
     self.didInit = NO;
-    self.currFilter = FilterTypeFood;
 }
 
 -(void) eventsTapped {
     [self removeViews];
     [self getEvents];
     self.didInit = NO;
-    self.currFilter = FilterTypeEvents;
 }
 
 -(void) placesTapped {
     [self removeViews];
     [self getPlaces];
     self.didInit = NO;
-    self.currFilter = FilterTypeYale;
 }
 
 -(void) allTapped {
     [self removeViews];
     [self getAll];
     self.didInit = NO;
-    self.currFilter = FilterTypeAll;
 }
 
 #pragma Getting Information to populate view
