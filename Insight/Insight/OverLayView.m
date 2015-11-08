@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) UIButton *eventsButton;
 @property (nonatomic, strong) UIButton *foodButton;
+@property (nonatomic, strong) UIButton *yaleButton;
 @property (nonatomic) BOOL settingsHidden;
 
 @property (nonatomic, strong) UIButton *infoButton;
@@ -39,13 +40,22 @@
     [self.eventsButton setFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-50, 40, 40)];
     [self.eventsButton setImage:[UIImage imageNamed:@"events.png"] forState:UIControlStateNormal];
     self.eventsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.eventsButton addTarget:self action:@selector(eventsTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.eventsButton];
     
     self.foodButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.foodButton setFrame:CGRectMake(self.frame.size.width-150, self.frame.size.height-50, 40, 40)];
     [self.foodButton setImage:[UIImage imageNamed:@"food.png"] forState:UIControlStateNormal];
     self.foodButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.foodButton addTarget:self action:@selector(foodTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.foodButton];
+    
+    self.yaleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.yaleButton setFrame:CGRectMake(self.frame.size.width-200, self.frame.size.height-50, 40, 40)];
+    [self.yaleButton setImage:[UIImage imageNamed:@"yale.png"] forState:UIControlStateNormal];
+    self.yaleButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+    [self.yaleButton addTarget:self action:@selector(yaleTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.yaleButton];
     
     [self dismissSettings];
     
@@ -74,6 +84,21 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnView:)];
     [self addGestureRecognizer:tap];
+}
+
+-(void) eventsTapped {
+    [self.parentView eventsTapped];
+    [self dismissSettings];
+}
+
+-(void) foodTapped {
+    [self.parentView foodTapped];
+    [self dismissSettings];
+}
+
+-(void) yaleTapped {
+    [self.parentView placesTapped];
+    [self dismissSettings];
 }
 
 -(void) showInfo {
@@ -113,6 +138,7 @@
     if(self.settingsHidden) {
         [self.eventsButton setHidden:NO];
         [self.foodButton setHidden:NO];
+        [self.yaleButton setHidden:NO];
         self.settingsHidden = NO;
     } else {
         [self dismissSettings];
@@ -122,6 +148,7 @@
 -(void) dismissSettings {
     [self.eventsButton setHidden:YES];
     [self.foodButton setHidden:YES];
+    [self.yaleButton setHidden:YES];
     self.settingsHidden = YES;
 }
 

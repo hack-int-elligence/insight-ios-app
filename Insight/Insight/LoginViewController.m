@@ -40,6 +40,13 @@
     skipButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 50);
     [skipButton addTarget:self action:@selector(skipFacebook) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:skipButton];
+    
+    UIButton *logoButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    logoButton.frame=CGRectMake(0,0,self.view.frame.size.width-30,100);
+    [logoButton setImage:[UIImage imageNamed:@"insight.jpg"] forState:UIControlStateNormal];
+    logoButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    //[logoButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:logoButton];
 
 }
 

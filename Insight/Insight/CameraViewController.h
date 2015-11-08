@@ -17,6 +17,10 @@
 -(void) displayDirections;
 -(void) checkIn;
 
+-(void) foodTapped;
+-(void) eventsTapped;
+-(void) placesTapped;
+-(void) allTapped;
 
 @end
 

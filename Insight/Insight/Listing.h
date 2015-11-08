@@ -20,5 +20,7 @@
 @property (nonatomic, strong) NSString *address;
 @property (nonatomic, strong) UIView *view;
 @property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) NSString *icon;
+@property (nonatomic, strong) NSString *info;
 
 @end
