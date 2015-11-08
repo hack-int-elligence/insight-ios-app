@@ -11,6 +11,7 @@
 #import "SVProgressHUD/SVProgressHUD.h"
 #import "Listing.h"
 #import "InfoViewController.h"
+#import "DirectionsTableViewController.h"
 
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
@@ -176,6 +177,11 @@
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
                                           NSLog(@"%@", loginSuccessful);
+                                          
+                                          DirectionsTableViewController *directionsTVC = [[DirectionsTableViewController alloc] init];
+                                          directionsTVC.directions = [loginSuccessful objectForKey:@"steps"];
+                                          directionsTVC.destination = [loginSuccessful objectForKey:@"destinationDescription"];
+                                          [self.imagePicker presentViewController:directionsTVC animated:NO completion:nil];
                                       }];
     [dataTask resume];
 }

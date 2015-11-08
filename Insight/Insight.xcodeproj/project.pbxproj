@@ -12,6 +12,7 @@
 		6B0C374E1BEDAE8500628FD4 /* OverLayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B0C374D1BEDAE8500628FD4 /* OverLayView.m */; };
 		6B0C375A1BEDF65600628FD4 /* Listing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B0C37591BEDF65600628FD4 /* Listing.m */; };
 		6B0C37701BEF273500628FD4 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B0C376F1BEF273500628FD4 /* InfoViewController.m */; };
+		6B0C37731BEF310F00628FD4 /* DirectionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B0C37721BEF310F00628FD4 /* DirectionsTableViewController.m */; };
 		6BFC811F1BEC5B4B00A6F1ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFC811E1BEC5B4B00A6F1ED /* main.m */; };
 		6BFC81221BEC5B4B00A6F1ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFC81211BEC5B4B00A6F1ED /* AppDelegate.m */; };
 		6BFC81251BEC5B4B00A6F1ED /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFC81241BEC5B4B00A6F1ED /* CameraViewController.m */; };
@@ -32,6 +33,8 @@
 		6B0C37591BEDF65600628FD4 /* Listing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Listing.m; sourceTree = "<group>"; };
 		6B0C376E1BEF273500628FD4 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		6B0C376F1BEF273500628FD4 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
+		6B0C37711BEF310F00628FD4 /* DirectionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionsTableViewController.h; sourceTree = "<group>"; };
+		6B0C37721BEF310F00628FD4 /* DirectionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionsTableViewController.m; sourceTree = "<group>"; };
 		6BFC811A1BEC5B4B00A6F1ED /* Insight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Insight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BFC811E1BEC5B4B00A6F1ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6BFC81201BEC5B4B00A6F1ED /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -90,6 +93,8 @@
 				6B0C374D1BEDAE8500628FD4 /* OverLayView.m */,
 				6B0C376E1BEF273500628FD4 /* InfoViewController.h */,
 				6B0C376F1BEF273500628FD4 /* InfoViewController.m */,
+				6B0C37711BEF310F00628FD4 /* DirectionsTableViewController.h */,
+				6B0C37721BEF310F00628FD4 /* DirectionsTableViewController.m */,
 				6BFC81341BEC609B00A6F1ED /* LaunchScreen.storyboard */,
 				6BFC81291BEC5B4B00A6F1ED /* Assets.xcassets */,
 				6BFC812E1BEC5B4B00A6F1ED /* Info.plist */,
@@ -249,6 +254,7 @@
 				6B0C374E1BEDAE8500628FD4 /* OverLayView.m in Sources */,
 				6BFC81251BEC5B4B00A6F1ED /* CameraViewController.m in Sources */,
 				6BFC81221BEC5B4B00A6F1ED /* AppDelegate.m in Sources */,
+				6B0C37731BEF310F00628FD4 /* DirectionsTableViewController.m in Sources */,
 				6B0C37701BEF273500628FD4 /* InfoViewController.m in Sources */,
 				6BFC811F1BEC5B4B00A6F1ED /* main.m in Sources */,
 			);
