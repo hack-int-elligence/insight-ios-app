@@ -38,28 +38,28 @@
     [self addSubview:settingsButton];
     
     self.resetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.resetButton setFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-50, 40, 40)];
+    [self.resetButton setFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-58, 60, 60)];
     [self.resetButton setImage:[UIImage imageNamed:@"all.png"] forState:UIControlStateNormal];
     self.resetButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.resetButton addTarget:self action:@selector(resetTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.resetButton];
     
     self.foodButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.foodButton setFrame:CGRectMake(self.frame.size.width-150, self.frame.size.height-50, 40, 40)];
+    [self.foodButton setFrame:CGRectMake(self.frame.size.width-145, self.frame.size.height-60, 60, 60)];
     [self.foodButton setImage:[UIImage imageNamed:@"food.png"] forState:UIControlStateNormal];
     self.foodButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.foodButton addTarget:self action:@selector(foodTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.foodButton];
     
     self.yaleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.yaleButton setFrame:CGRectMake(self.frame.size.width-200, self.frame.size.height-50, 40, 40)];
+    [self.yaleButton setFrame:CGRectMake(self.frame.size.width-190, self.frame.size.height-50, 40, 40)];
     [self.yaleButton setImage:[UIImage imageNamed:@"yale.png"] forState:UIControlStateNormal];
     self.yaleButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.yaleButton addTarget:self action:@selector(yaleTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.yaleButton];
     
     self.eventsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.eventsButton setFrame:CGRectMake(self.frame.size.width-250, self.frame.size.height-50, 40, 40)];
+    [self.eventsButton setFrame:CGRectMake(self.frame.size.width-240, self.frame.size.height-50, 40, 40)];
     [self.eventsButton setImage:[UIImage imageNamed:@"events.png"] forState:UIControlStateNormal];
     self.eventsButton.transform = CGAffineTransformMakeRotation(M_PI_2);
     [self.eventsButton addTarget:self action:@selector(eventsTapped) forControlEvents:UIControlEventTouchUpInside];
