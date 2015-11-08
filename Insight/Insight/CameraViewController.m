@@ -10,6 +10,7 @@
 #import "OverLayView.h"
 #import "SVProgressHUD/SVProgressHUD.h"
 #import "Listing.h"
+#import "InfoViewController.h"
 
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
@@ -134,8 +135,9 @@
 - (void) updateObjectsWithHeading:(int) heading {
     for(Listing *l in self.viewArray) {
         float xval = ((l.heading - heading)/63.54 + 1/2)*self.view.frame.size.height;
-        l.view.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
-        l.label.center = CGPointMake(self.overlayView.frame.size.width/2+20, xval);
+        float yval = (l.distance)/500 * self.view.frame.size.width;
+        l.view.center = CGPointMake(yval, xval);
+        l.label.center = CGPointMake(yval, xval);
     }
 }
 
@@ -147,14 +149,15 @@
 }
 
 -(void) displayInfo {
-    NSLog(@"DISPLAYING INFO");
-    NSLog(@"%@", self.currListing.info);
+    InfoViewController *infoVC = [[InfoViewController alloc] init];
+    //infoVC.info = self.currListing.info;
+    infoVC.info = @"This is just some test text so that I can see if this view looks good.";
+    [self.imagePicker presentViewController:infoVC animated:YES completion:nil];
 }
 
 -(void) displayDirections {
     
     NSString *post = [NSString stringWithFormat: @"currentLocationLatitude=%f&currentLocationLongitude=%f&destinationLatitude=%f&destinationLongitude=%f", self.latitude, self.longitude, self.currListing.latitude, self.currListing.longitude];
-    NSLog(@"%@", post);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -207,7 +210,6 @@
                                                                                                           options:kNilOptions
                                                                                                             error:&error];
                                           NSLog(@"%@", loginSuccessful);
-                                          //[SVProgressHUD dismiss];
                                       }];
     [dataTask resume];
     
@@ -278,8 +280,8 @@
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
-                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
-                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
+                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
                                               tempView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
                                               tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempView.layer.cornerRadius = 5;
@@ -349,8 +351,8 @@
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
-                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
-                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
+                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
                                               tempView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
                                               tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempView.layer.cornerRadius = 5;
@@ -420,8 +422,8 @@
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
-                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
-                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
+                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
                                               tempView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
                                               tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempView.layer.cornerRadius = 5;
@@ -491,8 +493,8 @@
                                               
                                               float xval = ((tempListing.heading - self.heading)/63.54 + 1/2)*self.view.frame.size.height;
                                               
-                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
-                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                                              UIView *tempView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
+                                              tempView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
                                               tempView.center = CGPointMake(self.overlayView.frame.size.width/2, xval);
                                               tempView.transform = CGAffineTransformMakeRotation(M_PI_2);
                                               tempView.layer.cornerRadius = 5;
